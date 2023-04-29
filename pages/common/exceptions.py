@@ -41,3 +41,10 @@ class ActionFailedException(Exception):
     
     def __str__(self) -> str:
         return super().__str__()
+
+class LoginScreenException(Exception):
+    def __init__(self, value):
+        self.value = value
+    
+    def __str__(self) -> str:
+        return super().__str__()
