@@ -1,3 +1,5 @@
+import time
+
 from .common.base_page import BasePage
 from .locators.locators import LogInPageLocators
 from .common.exceptions import LoginScreenException
@@ -24,18 +26,30 @@ class LogInPage(BasePage):
         :return: bool, True if login successful, False otherwise
         :exception: Raise LoginScreenException, if some issue happens while login
         """
-        self.send_keys(LogInPageLocators.email, username)
-        self.send_keys(LogInPageLocators.pwd, password)
-        if remember_me:
-            self.click(LogInPageLocators.remember)
-        self.click(LogInPageLocators.login_btn)
-        if self.get_page_title()=='Spotify - Web Player: Music for everyone':
-            self.logger.info(f'Login sucessful with username: {username} and password{password}')
-            return True
-        elif self.is_element_present(LogInPageLocators.error):
-            self.logger.warn(f'Login unsucessful with username: {username} and password{password}')
-            return False
-        else:
+        
+        try:
+            self.send_keys(LogInPageLocators.email, username)
+            self.send_keys(LogInPageLocators.pwd, password)
+            if remember_me:
+                self.click(LogInPageLocators.remember)
+            self.click(LogInPageLocators.login_btn)
+            time.sleep(3)
+            if self.get_page_title()=='Spotify - Web Player: Music for everyone':
+                self.logger.info(f'Login sucessful with username: {username} and password{password}')
+                return True
+            elif self.is_element_present(LogInPageLocators.error) and self._validate_error_message('Incorrect username or password.'):
+                self.logger.warn(f'Login unsucessful with username: {username} and password{password}')
+                return False
+        except:
             raise LoginScreenException('Error while logging in')
             self.logger.error('Error while logging in')
+            self.take_screenshot('LoginFailed')     
+            
+
+    def _validate_error_message(self, msg=''):
+        """
+        Validates the error message
+        """
+
+        return msg==self.get_text(LogInPageLocators.error)
         
