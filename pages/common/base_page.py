@@ -1,3 +1,6 @@
+import os
+from datetime import datetime
+
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.common.keys import Keys
@@ -266,4 +269,13 @@ class BasePage:
             self.logger.error(f"Unable to perform drag and drop from {source_locator} to {target_locator}: {e}")
             raise DragAndDropException("Unable to perform drag and drop operation")
 
+    def take_screenshot(self, name):
+        """Take screenshot
 
+        : param name (str): Name of the screenshot
+        Saves the sreenshot in the screenshots folder
+        """
+        now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+        file_name = f"{name}_{now}.png"
+        file_path = os.path.join(os.getcwd(), 'screenshots' ,file_name)
+        self.driver.save_screenshot(file_path)
