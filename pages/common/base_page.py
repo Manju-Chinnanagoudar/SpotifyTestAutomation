@@ -9,13 +9,16 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, WebDriverException, TimeoutException, ElementNotInteractableException
 
 from .exceptions import DragAndDropException, NavigationException, ElementNotFoundException, ElementActionException, ActionFailedException
+
 from utils.logger import Logger
+from utils.config import Config
 
 
 class BasePage:
+
     def __init__(self, driver):
         self.driver = driver
-        #self.config = config
+        self.config = Config('config/config.ini').config
         self.logger = Logger()
 
     def navigate(self, url):
@@ -29,7 +32,7 @@ class BasePage:
     def wait_for_element(self, locator, timeout=10):
         try:
             element = WebDriverWait(self.driver, timeout).until(
-                EC.presence_of_element_located(*locator)
+                EC.presence_of_element_located(locator)
             )
             self.logger.info(f"Element {locator} found")
             return element
