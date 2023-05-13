@@ -28,6 +28,7 @@ class LogInPage(BasePage):
         """
         
         try:
+            self.wait_for_element(LogInPageLocators.email)
             self.send_keys(LogInPageLocators.email, username)
             self.send_keys(LogInPageLocators.pwd, password)
             if remember_me:
@@ -35,10 +36,10 @@ class LogInPage(BasePage):
             self.click(LogInPageLocators.login_btn)
             time.sleep(3)
             if self.get_page_title()=='Spotify - Web Player: Music for everyone':
-                self.logger.info(f'Login sucessful with username: {username} and password{password}')
+                self.logger.info(f'Login sucessful with username: {username} and password: {password}')
                 return True
             elif self.is_element_present(LogInPageLocators.error) and self._validate_error_message('Incorrect username or password.'):
-                self.logger.warn(f'Login unsucessful with username: {username} and password{password}')
+                self.logger.warn(f'Login unsucessful with username: {username} and password: {password}')
                 return False
         except:
             raise LoginScreenException('Error while logging in')
