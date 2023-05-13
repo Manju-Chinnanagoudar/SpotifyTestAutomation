@@ -164,3 +164,9 @@ Logs/
 
 # Test files
 _test*
+
+# Screenshots
+screenshots/
+
+# Config file
+config.ini
