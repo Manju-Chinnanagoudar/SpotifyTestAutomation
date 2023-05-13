@@ -78,7 +78,3 @@ class HeaderSection(BasePage):
             raise ElementNotFoundException('Failed to click on profile dropdown in the header')
             self.logger.error('Failed to click on profile dropdown in the header')
     
-    def is_logged_in(self):
-
-        
-        return not self.is_element_present(HeaderLocators.login_btn)

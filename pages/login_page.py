@@ -38,7 +38,7 @@ class LogInPage(BasePage):
             if self.get_page_title()=='Spotify - Web Player: Music for everyone':
                 self.logger.info(f'Login sucessful with username: {username} and password: {password}')
                 return True
-            elif self.is_element_present(LogInPageLocators.error) and self._validate_error_message('Incorrect username or password.'):
+            elif self.is_element_present(LogInPageLocators.error):
                 self.logger.warn(f'Login unsucessful with username: {username} and password: {password}')
                 return False
         except:
@@ -47,10 +47,10 @@ class LogInPage(BasePage):
             self.take_screenshot('LoginFailed')     
             
 
-    def _validate_error_message(self, msg=''):
+    def validate_error_message(self, msg=''):
         """
         Validates the error message
         """
-
+        self.logger.info(f'Got the error message {self.get_text(LogInPageLocators.error)}')
         return msg==self.get_text(LogInPageLocators.error)
         

@@ -34,5 +34,29 @@ def test_login_valid(browser):
     # Verify successful login
     assert is_logged_in == True
     
-    # Validate the user name 
-    assert header.is_logged_in() == True
+
+@pytest.mark.parametrize('username,password', [
+    ('', 'password1'),
+    ('user1', ''),
+    ('', '')
+])
+def test_login_invalid(browser, username, password):
+
+    login_page = LogInPage(browser)
+    header = HeaderSection(browser)
+
+    # Navigate to the spotify
+    login_page.navigate(login_page.config.get('APP', 'url'))
+
+    # Click on the login button
+    header.click_login_btn()
+
+    # Login with valid credentials 
+    is_logged_in = login_page.login_with_email(username, password)
+    
+    # Verify successful login
+    assert is_logged_in == False
+    
+
+    # Verify the error message
+    assert login_page.validate_error_message('Incorrect username or password.') == True
